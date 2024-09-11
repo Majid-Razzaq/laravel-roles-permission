@@ -22,7 +22,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/permissions/create', [PermissionController::class, 'store'])->name('permissions.store');
     Route::get('/permissions/{id}/edit', [PermissionController::class, 'edit'])->name('permissions.edit');
     Route::post('/permissions/{id}', [PermissionController::class, 'update'])->name('permissions.update');
-
+    Route::delete('/permissions', [PermissionController::class, 'destroy'])->name('permissions.destroy');
 });
 
 require __DIR__.'/auth.php';

@@ -30,7 +30,7 @@
                             <td class="px-6 py-3 text-left">{{ \Carbon\Carbon::parse($permission->created_at)->format('d M, Y')  }}</td>
                             <td class="px-6 py-3 text-center">
                                 <a href="{{ route('permissions.edit',$permission->id) }}" class="bg-slate-700 text-sm text-white rounded-md px-3 py-2 hover:bg-slate-600">Edit</a>
-                                <a href="#" class="bg-red-600 text-sm text-white rounded-md px-3 py-2 hover:bg-red-500">Delete</a>
+                                <a href="javascript:void(0)" onclick="deletePermission({{ $permission->id }})" class="bg-red-600 text-sm text-white rounded-md px-3 py-2 hover:bg-red-500">Delete</a>
                             </td>
                         </tr>                        
                     @endforeach
@@ -42,4 +42,25 @@
             </div>
         </div>
     </div>
+    <x-slot name="script">
+        <script type="text/javascript">
+            function deletePermission(id) {
+                if(confirm("Are you sure you want to delete?")) {
+                    $.ajax({
+                        type: "DELETE",
+                        url: "{{ route('permissions.destroy') }}",
+                        data: {id: id},
+                        dataType: "json",
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            window.location.href = "{{ route('permissions.index') }}";
+                        }
+                    });
+                }
+            }
+        </script>
+    </x-slot>
+    
 </x-app-layout>
