@@ -63,24 +63,59 @@ class ArticleController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $article = Article::findOrFail($id);
+        return view('articles.edit',[
+            'article' => $article,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $article = Article::findOrFail($id);
+
+        $validator = Validator::make($request->all(),[
+            'title' => 'required|min:5',
+            'author' => 'required|min:3',
+        ]);
+
+        if($validator->passes()){
+            $article->title = $request->title;
+            $article->author = $request->author;
+            $article->text = $request->text;
+            $article->save();
+
+            Session()->flash('success','Article updated successfully.');
+            return redirect()->route('articles.index');
+        }else{
+            return redirect()->route('articles.edit')->withInput()->withErrors($validator);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
-        //
+        $id = $request->id;
+        $article = Article::find($id);
+
+        if($article == null){
+            Session()->flash('error','Article not found');
+            return response()->json([
+                'status' => false,
+            ]);
+        }
+
+        $article->delete();
+
+        Session()->flash('success','Article deleted successfully');
+        return response()->json([
+            'status' => true,
+        ]);
     }
 }
