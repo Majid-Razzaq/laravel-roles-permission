@@ -33,8 +33,13 @@
                             <td class="px-6 py-3 text-left">{{ $user->roles->pluck('name')->implode(', ') }}</td>
                             <td class="px-6 py-3 text-left">{{ \Carbon\Carbon::parse($user->created_at)->format('d M, Y')  }}</td>
                             <td class="px-6 py-3 text-center">
-                                <a href="{{ route('users.edit',$user->id) }}" class="bg-slate-700 text-sm text-white rounded-md px-3 py-2 hover:bg-slate-600">Edit</a>
-                                <a href="javascript:void(0)" onclick="deleteUser({{ $user->id }})" class="bg-red-600 text-sm text-white rounded-md px-3 py-2 hover:bg-red-500">Delete</a>
+                                @can('edit users')
+                                    <a href="{{ route('users.edit',$user->id) }}" class="bg-slate-700 text-sm text-white rounded-md px-3 py-2 hover:bg-slate-600">Edit</a>
+                                @endcan
+
+                                @can('delete users')
+                                     <a href="javascript:void(0)" onclick="deleteUser({{ $user->id }})" class="bg-red-600 text-sm text-white rounded-md px-3 py-2 hover:bg-red-500">Delete</a>
+                                @endcan
                             </td> 
                         </tr>                        
                     @endforeach
