@@ -4,6 +4,9 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Users') }}
             </h2>
+            @can('create users')
+                <a href="{{ route('users.create') }}" class="bg-slate-700 text-sm text-white rounded-md px-3 py-2">Create</a>
+            @endcan
         </div>
     </x-slot>
 
@@ -65,7 +68,7 @@
                             'X-CSRF-TOKEN': '{{ csrf_token() }}'
                         },
                         success: function(response) {
-                            window.location.href = "{{ route('roles.index') }}";
+                            window.location.href = "{{ route('users.index') }}";
                         }
                     });
                 }
